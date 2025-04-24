@@ -1,5 +1,55 @@
 load("@prelude//toolchains:demo.bzl", "system_demo_toolchains")
+load(":defs.bzl", "android_toolchain_outer", "config_backed_dex_toolchain", "empty_dex_toolchain", "bootstrap_prebuilt_jar", "java_toolchain", "kotlin_toolchain", "prebuilt_jar_toolchain", "toolchain")
 
 # All the default toolchains, suitable for a quick demo or early prototyping.
 # Most real projects should copy/paste the implementation to configure them.
 system_demo_toolchains()
+
+# java_toolchain(
+#     name = "java_for_android",
+#     visibility = ["PUBLIC"],
+# )
+
+# java_toolchain(
+#     name = "java_graalvm_bootstrap",
+#     visibility = ["PUBLIC"],
+# )
+
+# java_toolchain(
+#     name = "java_bootstrap",
+#     visibility = ["PUBLIC"],
+# )
+
+# kotlin_toolchain(
+#     name = "kotlin_for_android",
+#     visibility = ["PUBLIC"],
+# )
+
+prebuilt_jar_toolchain(
+    name = "prebuilt_jar_bootstrap_toolchain",
+    is_bootstrap_toolchain = True,
+    visibility = ["PUBLIC"],
+)
+
+java_toolchain(
+    name = "java",
+    visibility = ["PUBLIC"],
+)
+
+toolchain(
+    name = "prebuilt_jar_bootstrap",
+    dep = ":prebuilt_jar_bootstrap_toolchain",
+    visibility = ["PUBLIC"],
+)
+
+config_backed_dex_toolchain(
+    name = "dex",
+    # d8_command = "prelude//toolchains/android/src/com/facebook/buck/android/dex:run_d8_binary",
+    visibility = ["PUBLIC"],
+)
+
+empty_dex_toolchain(
+    name = "empty_dex",
+    # d8_command = None,
+    visibility = ["PUBLIC"],
+)

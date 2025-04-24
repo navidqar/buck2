@@ -11,3 +11,10 @@ cxx_library(
     exported_headers = glob(["**/*.hpp"]),
     visibility = ["PUBLIC"],
 )
+
+java_library(
+    name = "java_lib",
+    srcs = ["HelloWorld.java"],
+    source = "11",
+    target = "11",
+)

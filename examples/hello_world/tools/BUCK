@@ -1,0 +1,11 @@
+sh_binary(
+    name = "javac",
+    main = "javac.sh",
+    visibility = ["PUBLIC"],
+)
+
+sh_binary(
+    name = "java",
+    main = "java.sh",
+    visibility = ["PUBLIC"],
+)

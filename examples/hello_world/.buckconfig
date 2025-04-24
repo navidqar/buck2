@@ -16,3 +16,6 @@ buck = none
 
 [parser]
 target_platform_detector_spec = target:root//...->prelude//platforms:default
+
+[build]
+is_oss = true

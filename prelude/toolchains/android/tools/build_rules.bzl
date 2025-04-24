@@ -58,10 +58,13 @@ def _set_buck2_kotlin_toolchain(**kwargs):
 def _set_buck2_dex_toolchain(**kwargs):
     # Override dex toolchain to avoid dependency cycles in unconfigured graph
     dex_toolchain = kwargs.pop("_dex_toolchain", None)
-    kwargs["_dex_toolchain"] = dex_toolchain or select({
-        "DEFAULT": "toolchains//:empty_dex",
-        "ovr_config//os/constraints:android": "toolchains//:dex",
-    })
+    if is_oss_build():
+        kwargs["_dex_toolchain"] = dex_toolchain or "toolchains//:empty_dex"
+    else:
+        kwargs["_dex_toolchain"] = dex_toolchain or select({
+            "DEFAULT": "toolchains//:empty_dex",
+            "ovr_config//os/constraints:android": "toolchains//:dex",
+        })
     return kwargs
 
 def _set_versioned_java_srcs(**kwargs):
@@ -137,7 +140,7 @@ def buck_java_graalvm_binary(name, **kwargs):
 def toolchain_prebuilt_jar(name, **kwargs):
     kwargs = _add_labels(**kwargs)
     kwargs = _set_buck2_dex_toolchain(**kwargs)
-    if kwargs.pop("should_generate_snapshot", True) == False:
+    if kwargs.pop("should_generate_snapshot", True) == False and not is_oss_build():
         kwargs["_prebuilt_jar_toolchain"] = "toolchains//:prebuilt_jar_bootstrap_no_snapshot"
     else:
         kwargs["_prebuilt_jar_toolchain"] = "toolchains//:prebuilt_jar_bootstrap"
